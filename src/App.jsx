@@ -1,8 +1,9 @@
 import TarefasLista from "./TarefasLista/indexTarefas";
 import Header from "./Header/indexHeader";
-import Tarefas from "./TarefasLista/indexTarefas";
-import { TarefasProvider } from "./todoContext";
-// import { TarefasProvider } from "./TodoContext";
+// import Tarefas from "./TarefasLista/indexTarefas";
+// import { TarefasProvider } from "./todoContext";
+import { TarefasProvider } from "./TodoContext";
+import CriaTarefa from "./CriaTarefa";
 
 function App() {
   return (
@@ -15,8 +16,8 @@ function App() {
       <Header />
       <section className="w-full max-w-3xl m-auto ">
         <TarefasProvider>
+          <CriaTarefa />
           <TarefasLista />
-          
           {/* <Tarefas /> */}
         </TarefasProvider>
       </section>
