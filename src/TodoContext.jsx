@@ -1,65 +1,35 @@
-// src/TarefasContext.jsx
 import { createContext, useState } from "react";
 
-// Criação do contexto para o tema
 export const TodoContext = createContext();
 
-
 export function TarefasProvider({ children }) {
-  const [tarefas, setTarefas] = useState([]);
-  const [contadorTarefa,setContador] = useState(0);
+  const [listaTarefas, setListaTarefas] = useState([]);
+  const [totalTarefas, setTotalTarefas] = useState(0);
+  const [tarefasConcluidas, setTarefasConcluidas] = useState(0);
 
-
-
-  
-  const [contadorTarefaConc, setContadorConc] = useState(0)
-
-  const adicionarTarefa = (tarefa) => {
-    const novaTarefa = {
-      id: Date.now(),
-      texto: tarefa, 
-      status: false,
-    };
-    
-    setTarefas([...tarefas, novaTarefa]);
-    setContador(contadorTarefa + 1)
-    
-  };
-  const excluirTarefa = ({id, status}) => {
-    
-    
-    
-    setTarefas(tarefas.filter((tarefa) => tarefa.id !== id));
-    setContador(contadorTarefa - 1)
-    
-    if(status) setContadorConc(contadorTarefaConc - 1)
+  const adicionarNovaTarefa = (textoTarefa) => {
+    const novaTarefa = { id: Date.now(), texto: textoTarefa, status: false };
+    setListaTarefas([...listaTarefas, novaTarefa]);
+    setTotalTarefas(totalTarefas + 1);
   };
 
-  
-  const concluirTarefa = ({id, status}) => {
+  const removerTarefa = ({ id, status }) => {
+    setListaTarefas(listaTarefas.filter((tarefa) => tarefa.id !== id));
+    setTotalTarefas(totalTarefas - 1);
+    if (status) setTarefasConcluidas(tarefasConcluidas - 1);
+  };
 
-    if (status){ // desmarcar a tarefa
-      setContadorConc(contadorTarefaConc - 1)
-      
-    } else { // marcar a tarefa como concluída
-      setContadorConc(contadorTarefaConc + 1)
-      
-    }
-
-    setTarefas(
-      tarefas.map((tarefa) =>
-        tarefa.id === id ? { ...tarefa, status: !tarefa.status } : tarefa
-        
-      ),
+  const marcarConcluida = ({ id, status }) => {
+    setListaTarefas(
+      listaTarefas.map((tarefa) =>
+        tarefa.id === id ? { ...tarefa, status: !status } : tarefa
+      )
     );
-
-    
+    setTarefasConcluidas(status ? tarefasConcluidas - 1 : tarefasConcluidas + 1);
   };
 
   return (
-    <TodoContext.Provider
-      value={{ tarefas, adicionarTarefa, excluirTarefa, concluirTarefa, contadorTarefa, contadorTarefaConc}}
-    >
+    <TodoContext.Provider value={{ listaTarefas, adicionarNovaTarefa, removerTarefa, marcarConcluida, totalTarefas, tarefasConcluidas }}>
       {children}
     </TodoContext.Provider>
   );
